@@ -24,7 +24,26 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private int jumpCount = 0;
 
-    private bool isActive = true;
+    private bool isActive = false;
+
+	private Vector2 initialPlayerPosition;
+
+	/// <summary>
+	/// This function is called when the object becomes enabled and active.
+	/// </summary>
+	void OnEnable()
+	{
+		EventManager.OnGameStart += OnGameStart;
+	}
+
+	/// <summary>
+	/// Start is called on the frame when a script is enabled just before
+	/// any of the Update methods is called the first time.
+	/// </summary>
+	void Start()
+	{
+		initialPlayerPosition = transform.position;
+	}
 
     /// <summary>
     /// OnCollisionEnter is called when this collider/rigidbody has begun
@@ -36,7 +55,7 @@ public class PlayerController : MonoBehaviour
         var collider = other.collider;
         if (collider)
         {
-            if (collider.CompareTag("Ground"))
+            if (collider.CompareTag("Ground") && isActive)
             {
                 var collisionPosition = new Vector3(transform.position.x, other.contacts[0].point.y, transform.position.z);
                 var particles = Instantiate(groundCollisionParticles, collisionPosition, groundCollisionParticles.rotation);
@@ -59,6 +78,14 @@ public class PlayerController : MonoBehaviour
             DestroyPlayer();
         }
     }
+
+	/// <summary>
+	/// This function is called when the behaviour becomes disabled or inactive.
+	/// </summary>
+	void OnDisable()
+	{
+		EventManager.OnGameStart -= OnGameStart;
+	}
 
     public void Jump()
     {
@@ -94,11 +121,18 @@ public class PlayerController : MonoBehaviour
         var dp = Instantiate(destroyParticles);
         dp.position = transform.position;
         Destroy(dp.gameObject, 0.6f);
+		transform.position = initialPlayerPosition;
+		EventManager.CallOnGameOver();
     }
+
+	private void OnGameStart()
+	{
+		ActivatePlayer();
+	}
 
 	public void ActivatePlayer()
 	{
-		isActive = false;
+		isActive = true;
 		rb.bodyType = RigidbodyType2D.Dynamic;
         rb.velocity = Vector2.zero;
         col.enabled = true;

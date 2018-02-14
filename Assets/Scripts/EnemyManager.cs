@@ -19,7 +19,19 @@ public class EnemyManager : MonoBehaviour
 
     private bool generate = true;
 
+    public List<Blade> activeEnemies;
+
     public int enemiesSpawned = 0;
+
+    /// <summary>
+    /// This function is called when the object becomes enabled and active.
+    /// </summary>
+    void OnEnable()
+    {
+        EventManager.OnGameStart += OnGameStart;
+        EventManager.OnGameOver += OnGameOver;
+        EventManager.OnEnemyDeactive += OnEnemyDeactive;
+    }
 
     /// <summary>
     /// Start is called on the frame when a script is enabled just before
@@ -28,7 +40,16 @@ public class EnemyManager : MonoBehaviour
     private void Start()
     {
         InstantiateEnemies();
-		StartCoroutine(GenerateEnemies());
+    }
+
+    /// <summary>
+    /// This function is called when the behaviour becomes disabled or inactive.
+    /// </summary>
+    void OnDisable()
+    {
+        EventManager.OnGameStart -= OnGameStart;
+        EventManager.OnGameOver -= OnGameOver;
+        EventManager.OnEnemyDeactive -= OnEnemyDeactive;
     }
 
     private void InstantiateEnemies()
@@ -48,13 +69,41 @@ public class EnemyManager : MonoBehaviour
     private void SpawnEnemy(Transform spawnPoint)
     {
         var enemy = enemyPool.First(e => e.isActive == false);
+        if (activeEnemies == null)
+        {
+            activeEnemies = new List<Blade>();
+        }
+
         if (enemy)
         {
             enemy.position = spawnPoint.position;
             if (enemy.position.x > 0) { enemy.SetDirection(-1); } else { enemy.SetDirection(1); }
             enemy.SetActive(true);
             enemiesSpawned++;
+            EventManager.CallOnEnemyActive(enemy);
+            activeEnemies.Add(enemy);
         }
+    }
+
+    private void OnEnemyDeactive(Blade enemy)
+    {
+        activeEnemies.Remove(enemy);
+        if (!generate && (activeEnemies.Count <= 0))
+        {
+			EventManager.CallOnNoEnemyLeft();
+        }
+    }
+
+    public void OnGameStart()
+    {
+        generate = true;
+        enemiesSpawned = 0;
+        StartCoroutine(GenerateEnemies());
+    }
+
+    public void OnGameOver()
+    {
+        generate = false;
     }
 
     private IEnumerator GenerateEnemies()
@@ -62,7 +111,7 @@ public class EnemyManager : MonoBehaviour
         while (generate)
         {
             yield return new WaitForSeconds(spawnDuration);
-            SpawnEnemy(spawnPoints.GetRandom(0, 2));
+            SpawnEnemy(spawnPoints.GetRandom());
         }
     }
 }

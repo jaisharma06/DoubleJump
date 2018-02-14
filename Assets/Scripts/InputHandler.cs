@@ -5,17 +5,19 @@ using UnityEngine;
 public class InputHandler : MonoBehaviour
 {
     private PlayerController playerController;
+    private GameManager gameManager;
     // Use this for initialization
     void Start()
     {
         playerController = GetComponent<PlayerController>();
+        gameManager = FindObjectOfType<GameManager>();
     }
 
     // Update is called once per frame
     void Update()
     {
 #if UNITY_EDITOR
-		HandleInput();
+        HandleInput();
 #else
         HandleMobileInput();
 #endif
@@ -29,7 +31,12 @@ public class InputHandler : MonoBehaviour
             switch (touch.phase)
             {
                 case TouchPhase.Began:
-                    playerController.Jump();
+                    if (!gameManager.isGameOver)
+                        playerController.Jump();
+                    break;
+                case TouchPhase.Ended:
+                    if (gameManager.isGameOver)
+                        gameManager.StartGame();
                     break;
                 default: break;
             }
@@ -40,7 +47,13 @@ public class InputHandler : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            playerController.Jump();
+            if (!gameManager.isGameOver)
+                playerController.Jump();
+        }
+        else if (Input.GetMouseButtonUp(0))
+        {
+            if (gameManager.isGameOver)
+                gameManager.StartGame();
         }
     }
 }

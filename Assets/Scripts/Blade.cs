@@ -14,6 +14,11 @@ public class Blade : MonoBehaviour
     [SerializeField]
     private float rightBorder = 9.4f;
 
+    [SerializeField]
+    private float gameOverMultiplier = 3;
+
+    private float speed;
+
     public bool isActive { get; set; }
 
     private Collider2D col;
@@ -22,10 +27,19 @@ public class Blade : MonoBehaviour
     public Vector2 position { get { return transform.position; } set { transform.position = value; } }
 
     /// <summary>
+    /// This function is called when the object becomes enabled and active.
+    /// </summary>
+    void OnEnable()
+    {
+        EventManager.OnGameStart += OnGameStart;
+        EventManager.OnGameOver += OnGameOver;
+    }
+
+    /// <summary>
     /// Start is called on the frame when a script is enabled just before
     /// any of the Update methods is called the first time.
     /// </summary>
-    private void OnEnable()
+    private void Awake()
     {
         sr = GetComponent<SpriteRenderer>();
         col = GetComponent<Collider2D>();
@@ -43,8 +57,17 @@ public class Blade : MonoBehaviour
         }
         transform.Rotate(Vector3.forward * Time.deltaTime * rotationSpeed);
         var position = transform.position;
-        position.x += Time.deltaTime * dir * linearSpeed;
+        position.x += Time.deltaTime * dir * speed;
         transform.position = position;
+    }
+
+    /// <summary>
+    /// This function is called when the behaviour becomes disabled or inactive.
+    /// </summary>
+    void OnDisable()
+    {
+        EventManager.OnGameStart -= OnGameStart;
+        EventManager.OnGameOver -= OnGameOver;
     }
 
     public void SetDirection(int dir)
@@ -60,5 +83,17 @@ public class Blade : MonoBehaviour
         isActive = flag;
         col.enabled = flag;
         sr.enabled = flag;
+        if (!flag)
+            EventManager.CallOnEnemyDeactive(this);
+    }
+
+    public void OnGameStart()
+    {
+        speed = linearSpeed;
+    }
+
+    public void OnGameOver()
+    {
+        speed = linearSpeed * gameOverMultiplier;
     }
 }
