@@ -16,20 +16,12 @@ public class GameManager : MonoBehaviour
     public bool isGameOver = true;
     public bool detectTouch = true;
 
-    /// <summary>
-    /// This function is called when the object becomes enabled and active.
-    /// </summary>
     void OnEnable()
     {
         EventManager.OnGameOver += OnGameOver;
 		EventManager.OnNoEnemyLeft += OnNoEnemyLeft;
     }
 
-    /// <summary>
-    /// Sent when another object leaves a trigger collider attached to
-    /// this object (2D physics only).
-    /// </summary>
-    /// <param name="other">The other Collider2D involved in this collision.</param>
     void OnTriggerExit2D(Collider2D other)
     {
         if (isGameOver)
@@ -44,9 +36,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// This function is called when the behaviour becomes disabled or inactive.
-    /// </summary>
     void OnDisable()
     {
         EventManager.OnGameOver -= OnGameOver;

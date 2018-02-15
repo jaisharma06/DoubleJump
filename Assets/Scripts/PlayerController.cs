@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-
     [SerializeField]
     private Transform groundCollisionParticles;
     [SerializeField]
@@ -13,45 +12,41 @@ public class PlayerController : MonoBehaviour
     private float groundDistance = 0.35f;
     [SerializeField]
     private float jumpVelocity = 5;
-    [SerializeField]
-    private Rigidbody2D rb;
-    [SerializeField]
-    private Collider2D col;
-    [SerializeField]
-    private TrailRenderer trail;
-    [SerializeField]
-    private SpriteRenderer sr;
+
     [SerializeField]
     private Transform destroyParticles;
     [SerializeField]
     private int jumpCount = 0;
 
     private bool isActive = false;
+    private bool alreadyGrounded = false;
 
-	private Vector2 initialPlayerPosition;
+    private Vector2 initialPlayerPosition;
 
-	/// <summary>
-	/// This function is called when the object becomes enabled and active.
-	/// </summary>
-	void OnEnable()
+    private Rigidbody2D rb;
+    private Collider2D col;
+    private TrailRenderer trail;
+    private SpriteRenderer sr;
+
+    void OnEnable()
 	{
 		EventManager.OnGameStart += OnGameStart;
 	}
 
-	/// <summary>
-	/// Start is called on the frame when a script is enabled just before
-	/// any of the Update methods is called the first time.
-	/// </summary>
 	void Start()
 	{
-		initialPlayerPosition = transform.position;
+        InitializePlayer();
 	}
 
-    /// <summary>
-    /// OnCollisionEnter is called when this collider/rigidbody has begun
-    /// touching another rigidbody/collider.
-    /// </summary>
-    /// <param name="other">The Collision data associated with this collision.</param>
+    private void InitializePlayer()
+    {
+        rb = GetComponent<Rigidbody2D>();
+        col = GetComponent<Collider2D>();
+        sr = GetComponent<SpriteRenderer>();
+        trail = GetComponent<TrailRenderer>();
+        initialPlayerPosition = transform.position;
+    }
+
     private void OnCollisionEnter2D(Collision2D other)
     {
         var collider = other.collider;
@@ -59,6 +54,11 @@ public class PlayerController : MonoBehaviour
         {
             if (collider.CompareTag("Ground") && isActive)
             {
+                if (!alreadyGrounded)
+                {
+                    alreadyGrounded = true;
+                    return;
+                }
                 var collisionPosition = new Vector3(transform.position.x, other.contacts[0].point.y, transform.position.z);
                 var particles = Instantiate(groundCollisionParticles, collisionPosition, groundCollisionParticles.rotation);
                 Destroy(particles.gameObject, 0.6f);
@@ -66,11 +66,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Sent when another object enters a trigger collider attached to this
-    /// object (2D physics only).
-    /// </summary>
-    /// <param name="other">The other Collider2D involved in this collision.</param>
     void OnTriggerEnter2D(Collider2D other)
     {
         var blade = other.GetComponent<Blade>();
@@ -81,9 +76,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-	/// <summary>
-	/// This function is called when the behaviour becomes disabled or inactive.
-	/// </summary>
 	void OnDisable()
 	{
 		EventManager.OnGameStart -= OnGameStart;
@@ -121,6 +113,7 @@ public class PlayerController : MonoBehaviour
         col.enabled = false;
         sr.enabled = false;
         trail.enabled = false;
+        alreadyGrounded = false;
         var dp = Instantiate(destroyParticles);
         dp.position = transform.position;
         Destroy(dp.gameObject, 0.6f);
