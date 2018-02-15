@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
@@ -12,14 +10,23 @@ public class GameManager : MonoBehaviour
 	private GameObject gameplayUI;
 	[SerializeField]
 	private GameObject startGameUI;
+    [SerializeField]
+    private SpriteRenderer ground;
 
+    [HideInInspector]
     public bool isGameOver = true;
+    [HideInInspector]
     public bool detectTouch = true;
+
+    private Camera mainCamera;
 
     void OnEnable()
     {
         EventManager.OnGameOver += OnGameOver;
 		EventManager.OnNoEnemyLeft += OnNoEnemyLeft;
+        EventManager.OnInvertColor += InvertColor;
+
+        mainCamera = Camera.main;
     }
 
     void OnTriggerExit2D(Collider2D other)
@@ -40,6 +47,7 @@ public class GameManager : MonoBehaviour
     {
         EventManager.OnGameOver -= OnGameOver;
 		EventManager.OnNoEnemyLeft -= OnNoEnemyLeft;
+        EventManager.OnInvertColor -= InvertColor;
     }
 
     public void StartGame()
@@ -64,4 +72,18 @@ public class GameManager : MonoBehaviour
         detectTouch = true;
 		startGameUI.SetActive(true);
 	}
+
+    private void InvertColor()
+    {
+        if (mainCamera.backgroundColor == Color.black)
+        {
+            mainCamera.backgroundColor = Color.white;
+        }
+        else
+        {
+            mainCamera.backgroundColor = Color.black;
+        }
+
+        ground.material.color = (ground.material.color == Color.black) ? Color.white : Color.black;
+    }
 }

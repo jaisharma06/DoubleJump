@@ -8,12 +8,21 @@ public class EventManager
     public static Action<Blade> OnEnemyActive;
     public static Action<Blade> OnEnemyDeactive;
 	public static Action OnNoEnemyLeft;
+    public static Action OnInvertColor;
 
     public static void CallOnGameOver()
     {
         if (OnGameOver != null)
         {
             OnGameOver();
+        }
+    }
+
+    public static void CallOnInvertColor()
+    {
+        if (OnInvertColor != null)
+        {
+            OnInvertColor();
         }
     }
 

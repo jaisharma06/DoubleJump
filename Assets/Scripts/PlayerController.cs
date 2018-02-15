@@ -15,9 +15,8 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField]
     private Transform destroyParticles;
-    [SerializeField]
-    private int jumpCount = 0;
 
+    private int jumpCount = 0;
     private bool isActive = false;
     private bool alreadyGrounded = false;
 
@@ -31,7 +30,8 @@ public class PlayerController : MonoBehaviour
     void OnEnable()
 	{
 		EventManager.OnGameStart += OnGameStart;
-	}
+        EventManager.OnInvertColor += InvertColor;
+    }
 
 	void Start()
 	{
@@ -79,7 +79,8 @@ public class PlayerController : MonoBehaviour
 	void OnDisable()
 	{
 		EventManager.OnGameStart -= OnGameStart;
-	}
+        EventManager.OnInvertColor -= InvertColor;
+    }
 
     public void Jump()
     {
@@ -135,4 +136,11 @@ public class PlayerController : MonoBehaviour
         col.enabled = true;
         sr.enabled = true;
 	}
+
+    private void InvertColor()
+    {
+        sr.material.color = (sr.material.color == Color.black) ? Color.white : Color.black;
+        var color = (trail.material.GetColor("_TintColor") == Color.black) ? Color.white : Color.black;
+        trail.material.SetColor("_TintColor", color);
+    }
 }
