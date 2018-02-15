@@ -18,6 +18,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private Collider2D col;
     [SerializeField]
+    private TrailRenderer trail;
+    [SerializeField]
     private SpriteRenderer sr;
     [SerializeField]
     private Transform destroyParticles;
@@ -118,6 +120,7 @@ public class PlayerController : MonoBehaviour
         rb.velocity = Vector2.zero;
         col.enabled = false;
         sr.enabled = false;
+        trail.enabled = false;
         var dp = Instantiate(destroyParticles);
         dp.position = transform.position;
         Destroy(dp.gameObject, 0.6f);
@@ -133,6 +136,7 @@ public class PlayerController : MonoBehaviour
 	public void ActivatePlayer()
 	{
 		isActive = true;
+        trail.enabled = true;
 		rb.bodyType = RigidbodyType2D.Dynamic;
         rb.velocity = Vector2.zero;
         col.enabled = true;

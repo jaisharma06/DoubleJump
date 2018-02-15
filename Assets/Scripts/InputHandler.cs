@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class InputHandler : MonoBehaviour
 {
@@ -25,7 +23,7 @@ public class InputHandler : MonoBehaviour
 
     private void HandleMobileInput()
     {
-        if (Input.touchCount > 0)
+        if (Input.touchCount > 0 && gameManager.detectTouch)
         {
             var touch = Input.touches[0];
             switch (touch.phase)
@@ -45,6 +43,9 @@ public class InputHandler : MonoBehaviour
 
     private void HandleInput()
     {
+        if (!gameManager.detectTouch)
+            return;
+
         if (Input.GetMouseButtonDown(0))
         {
             if (!gameManager.isGameOver)

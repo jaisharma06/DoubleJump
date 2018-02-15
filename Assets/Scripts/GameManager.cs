@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
 	private GameObject startGameUI;
 
     public bool isGameOver = true;
+    public bool detectTouch = true;
 
     /// <summary>
     /// This function is called when the object becomes enabled and active.
@@ -65,11 +66,13 @@ public class GameManager : MonoBehaviour
     private void OnGameOver()
     {
         isGameOver = true;
+        detectTouch = false;
     }
 
 	private void OnNoEnemyLeft()
 	{
 		gameplayUI.SetActive(false);
+        detectTouch = true;
 		startGameUI.SetActive(true);
 	}
 }
