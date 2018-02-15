@@ -20,6 +20,8 @@ public class GameManager : MonoBehaviour
 
     private Camera mainCamera;
 
+    private AudioManager am;
+
     void OnEnable()
     {
         EventManager.OnGameOver += OnGameOver;
@@ -27,6 +29,7 @@ public class GameManager : MonoBehaviour
         EventManager.OnInvertColor += InvertColor;
 
         mainCamera = Camera.main;
+        am = AudioManager.instance;
     }
 
     void OnTriggerExit2D(Collider2D other)
@@ -58,12 +61,14 @@ public class GameManager : MonoBehaviour
         EventManager.CallOnGameStart();
 		gameplayUI.SetActive(true);
 		startGameUI.SetActive(false);
+        am.PlayBackgroundMusic(true);
     }
 
     private void OnGameOver()
     {
         isGameOver = true;
         detectTouch = false;
+        am.PlayBackgroundMusic(false);
     }
 
 	private void OnNoEnemyLeft()

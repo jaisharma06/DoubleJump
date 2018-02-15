@@ -16,11 +16,19 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private Transform destroyParticles;
 
+    [SerializeField]
+    private AudioClip sfxJump;
+    [SerializeField]
+    private AudioClip sfxBlast;
+    [SerializeField]
+    private AudioClip sfxSplat;
+
     private int jumpCount = 0;
     private bool isActive = false;
     private bool alreadyGrounded = false;
 
     private Vector2 initialPlayerPosition;
+    private AudioManager am;
 
     private Rigidbody2D rb;
     private Collider2D col;
@@ -45,6 +53,7 @@ public class PlayerController : MonoBehaviour
         sr = GetComponent<SpriteRenderer>();
         trail = GetComponent<TrailRenderer>();
         initialPlayerPosition = transform.position;
+        am = AudioManager.instance;
     }
 
     private void OnCollisionEnter2D(Collision2D other)
@@ -62,6 +71,7 @@ public class PlayerController : MonoBehaviour
                 var collisionPosition = new Vector3(transform.position.x, other.contacts[0].point.y, transform.position.z);
                 var particles = Instantiate(groundCollisionParticles, collisionPosition, groundCollisionParticles.rotation);
                 Destroy(particles.gameObject, 0.6f);
+                am.PlayOneShot(sfxSplat);
             }
         }
     }
@@ -92,6 +102,7 @@ public class PlayerController : MonoBehaviour
         if (isGrounded || jumpCount == 1)
         {
             rb.velocity = Vector2.up * jumpVelocity;
+            am.PlayOneShot(sfxJump);
             jumpCount++;
         }
     }
@@ -119,7 +130,8 @@ public class PlayerController : MonoBehaviour
         dp.position = transform.position;
         Destroy(dp.gameObject, 0.6f);
 		transform.position = initialPlayerPosition;
-		EventManager.CallOnGameOver();
+        am.PlayOneShot(sfxBlast);
+        EventManager.CallOnGameOver();
     }
 
 	private void OnGameStart()
