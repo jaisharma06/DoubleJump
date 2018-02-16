@@ -11,6 +11,10 @@ public class GameManager : MonoBehaviour
 	[SerializeField]
 	private GameObject startGameUI;
     [SerializeField]
+    private GameObject pauseButton;
+    [SerializeField]
+    private GameObject pausedText;
+    [SerializeField]
     private SpriteRenderer ground;
 
     [HideInInspector]
@@ -21,6 +25,8 @@ public class GameManager : MonoBehaviour
     private Camera mainCamera;
 
     private AudioManager am;
+
+    public bool isPaused {get; set;}
 
     void OnEnable()
     {
@@ -90,5 +96,15 @@ public class GameManager : MonoBehaviour
         }
 
         ground.material.color = (ground.material.color == Color.black) ? Color.white : Color.black;
+    }
+
+    public void PauseGame(bool flag)
+    {
+        if(isGameOver)
+        return;
+        Time.timeScale = (flag) ? 0 : 1;
+        pauseButton.SetActive(!flag);
+        pausedText.SetActive(flag);
+        isPaused = flag;
     }
 }
