@@ -29,7 +29,11 @@ public class InputHandler : MonoBehaviour
             switch (touch.phase)
             {
                 case TouchPhase.Began:
-                    if (!gameManager.isGameOver)
+                    if (gameManager.isGamePaused)
+                    {
+                        gameManager.OnGamePaused(false);
+                    }
+                    if (!gameManager.isGameOver && !gameManager.isGamePaused)
                         playerController.Jump();
                     break;
                 case TouchPhase.Ended:
@@ -50,6 +54,10 @@ public class InputHandler : MonoBehaviour
         {
             if (!gameManager.isGameOver)
                 playerController.Jump();
+            if (gameManager.isGamePaused)
+            {
+                gameManager.OnGamePaused(false);
+            }
         }
         else if (Input.GetMouseButtonUp(0))
         {

@@ -6,15 +6,21 @@ public class GameManager : MonoBehaviour
     public int score = 0;
     [SerializeField]
     private Text scoreText;
-	[SerializeField]
-	private GameObject gameplayUI;
-	[SerializeField]
-	private GameObject startGameUI;
+    [SerializeField]
+    private GameObject gameplayUI;
+    [SerializeField]
+    private GameObject pauseButton;
+    [SerializeField]
+    private GameObject pausedText;
+    [SerializeField]
+    private GameObject startGameUI;
     [SerializeField]
     private SpriteRenderer ground;
 
     [HideInInspector]
     public bool isGameOver = true;
+    [HideInInspector]
+    public bool isGamePaused = false;
     [HideInInspector]
     public bool detectTouch = true;
 
@@ -25,7 +31,7 @@ public class GameManager : MonoBehaviour
     void OnEnable()
     {
         EventManager.OnGameOver += OnGameOver;
-		EventManager.OnNoEnemyLeft += OnNoEnemyLeft;
+        EventManager.OnNoEnemyLeft += OnNoEnemyLeft;
         EventManager.OnInvertColor += InvertColor;
 
         mainCamera = Camera.main;
@@ -49,7 +55,7 @@ public class GameManager : MonoBehaviour
     void OnDisable()
     {
         EventManager.OnGameOver -= OnGameOver;
-		EventManager.OnNoEnemyLeft -= OnNoEnemyLeft;
+        EventManager.OnNoEnemyLeft -= OnNoEnemyLeft;
         EventManager.OnInvertColor -= InvertColor;
     }
 
@@ -59,8 +65,8 @@ public class GameManager : MonoBehaviour
         isGameOver = false;
         scoreText.text = score.ToString();
         EventManager.CallOnGameStart();
-		gameplayUI.SetActive(true);
-		startGameUI.SetActive(false);
+        gameplayUI.SetActive(true);
+        startGameUI.SetActive(false);
         am.PlayBackgroundMusic(true);
     }
 
@@ -71,12 +77,12 @@ public class GameManager : MonoBehaviour
         am.PlayBackgroundMusic(false);
     }
 
-	private void OnNoEnemyLeft()
-	{
-		gameplayUI.SetActive(false);
+    private void OnNoEnemyLeft()
+    {
+        gameplayUI.SetActive(false);
         detectTouch = true;
-		startGameUI.SetActive(true);
-	}
+        startGameUI.SetActive(true);
+    }
 
     private void InvertColor()
     {
@@ -90,5 +96,15 @@ public class GameManager : MonoBehaviour
         }
 
         ground.material.color = (ground.material.color == Color.black) ? Color.white : Color.black;
+    }
+
+    public void OnGamePaused(bool flag)
+    {
+        if (isGameOver)
+            return;
+        isGamePaused = flag;
+        pauseButton.SetActive(!flag);
+        pausedText.SetActive(flag);
+        Time.timeScale = (flag) ? 0 : 1;
     }
 }
