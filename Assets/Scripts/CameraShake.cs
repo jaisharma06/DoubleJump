@@ -22,6 +22,9 @@ public class CameraShake : MonoBehaviour
 
     private bool isRunning = false;
 
+    private float initialShakeDuration;
+    private float initialShakeAmount;
+
     private void OnEnable()
     {
         EventManager.OnGameOver += ShakeCamera;
@@ -34,6 +37,9 @@ public class CameraShake : MonoBehaviour
         {
             ShakeCamera();
         }
+
+        initialShakeDuration = shakeDuration;
+        initialShakeAmount = shakeAmount;
     }
 
     private void OnDisable()
@@ -63,9 +69,6 @@ public class CameraShake : MonoBehaviour
 
     private IEnumerator Shake()
     {
-        var initialShakeDuration = shakeDuration;
-        var initialShakeAmount = shakeAmount;
-
         while (shakeDuration > 0.01f)
         {
             Vector3 rotationAmount = Random.insideUnitSphere * shakeAmount;
