@@ -70,10 +70,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dir: -1
   rotationSpeed: 200
-  linearSpeed: 3
+  linearSpeed: 10
   leftBorder: -9.4
   rightBorder: 9.4
-  gameOverMultiplier: 3
+  gameOverMultiplier: 2
 --- !u!212 &212892294929686152
 SpriteRenderer:
   m_ObjectHideFlags: 1

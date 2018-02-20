@@ -3847,7 +3847,7 @@ MonoBehaviour:
   - {fileID: 258714440}
   enemyParent: {fileID: 1030945211}
   totalEnemies: 10
-  spawnDuration: 1
+  spawnDuration: 0.5
   activeEnemies: []
   enemiesSpawned: 0
 --- !u!4 &482709778
@@ -3904,7 +3904,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 7f75587ed6ed47b4fb7fa344e3e185c5, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 90f2eb7f2117e4f44af5e5191c5a3f5c, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.2
   m_Pitch: 1
@@ -4485,8 +4485,8 @@ Camera:
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
   m_TargetEye: 3
-  m_HDR: 1
-  m_AllowMSAA: 1
+  m_HDR: 0
+  m_AllowMSAA: 0
   m_AllowDynamicResolution: 0
   m_ForceIntoRT: 0
   m_OcclusionCulling: 1
@@ -4651,7 +4651,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 3
+  m_GravityScale: 8
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
@@ -4756,7 +4756,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   groundDistance: 0.4
-  jumpVelocity: 14
+  jumpVelocity: 23
   destroyParticles: {fileID: 4319457404349480, guid: bef2c477727ee7b438c061c90f194a97,
     type: 2}
   sfxJump: {fileID: 8300000, guid: 1c411aa6b8cda2b47b3b70f60c6b6810, type: 3}
