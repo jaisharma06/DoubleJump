@@ -35,6 +35,8 @@ public class PlayerController : MonoBehaviour
     private TrailRenderer trail;
     private SpriteRenderer sr;
 
+    private float height { get; set; }
+
     void OnEnable()
 	{
 		EventManager.OnGameStart += OnGameStart;
@@ -53,6 +55,7 @@ public class PlayerController : MonoBehaviour
         sr = GetComponent<SpriteRenderer>();
         trail = GetComponent<TrailRenderer>();
         initialPlayerPosition = transform.position;
+        height = col.bounds.size.y;
         am = AudioManager.instance;
     }
 
@@ -109,7 +112,7 @@ public class PlayerController : MonoBehaviour
 
     private bool IsGrounded()
     {
-        if (Physics2D.Raycast(transform.position, Vector2.down, groundDistance, groundLayerMask))
+        if (Physics2D.Raycast(transform.position, Vector2.down, (height / 2.0f + 0.15f), groundLayerMask))
         {
             jumpCount = 0;
             return true;
