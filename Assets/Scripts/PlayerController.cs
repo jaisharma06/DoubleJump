@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
@@ -38,15 +36,16 @@ public class PlayerController : MonoBehaviour
     private float height { get; set; }
 
     void OnEnable()
-	{
-		EventManager.OnGameStart += OnGameStart;
+    {
+        EventManager.OnGameStart += OnGameStart;
         EventManager.OnInvertColor += InvertColor;
+        EventManager.OnNoEnemyLeft += EnablePlayerSkin;
     }
 
-	void Start()
-	{
+    void Start()
+    {
         InitializePlayer();
-	}
+    }
 
     private void InitializePlayer()
     {
@@ -61,10 +60,10 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D other)
     {
-        var collider = other.collider;
-        if (collider)
+        var _collider = other.collider;
+        if (_collider)
         {
-            if (collider.CompareTag("Ground") && isActive)
+            if (_collider.CompareTag("Ground") && isActive)
             {
                 if (!alreadyGrounded)
                 {
@@ -84,15 +83,16 @@ public class PlayerController : MonoBehaviour
         var blade = other.GetComponent<Blade>();
         if (blade && isActive)
         {
-			blade.SetActive(false);
+            blade.SetActive(false);
             DestroyPlayer();
         }
     }
 
-	void OnDisable()
-	{
-		EventManager.OnGameStart -= OnGameStart;
+    void OnDisable()
+    {
+        EventManager.OnGameStart -= OnGameStart;
         EventManager.OnInvertColor -= InvertColor;
+        EventManager.OnNoEnemyLeft -= EnablePlayerSkin;
     }
 
     public void Jump()
@@ -122,7 +122,7 @@ public class PlayerController : MonoBehaviour
 
     private void DestroyPlayer()
     {
-		isActive = false;
+        isActive = false;
         rb.bodyType = RigidbodyType2D.Kinematic;
         rb.velocity = Vector2.zero;
         col.enabled = false;
@@ -132,25 +132,30 @@ public class PlayerController : MonoBehaviour
         var dp = Instantiate(destroyParticles);
         dp.position = transform.position;
         Destroy(dp.gameObject, 0.6f);
-		transform.position = initialPlayerPosition;
+        transform.position = initialPlayerPosition;
         am.PlayOneShot(sfxBlast);
         EventManager.CallOnGameOver();
     }
 
-	private void OnGameStart()
-	{
-		ActivatePlayer();
-	}
+    private void EnablePlayerSkin()
+    {
+        sr.enabled = true;
+    }
 
-	public void ActivatePlayer()
-	{
-		isActive = true;
+    private void OnGameStart()
+    {
+        ActivatePlayer();
+    }
+
+    public void ActivatePlayer()
+    {
+        isActive = true;
         trail.enabled = true;
-		rb.bodyType = RigidbodyType2D.Dynamic;
+        rb.bodyType = RigidbodyType2D.Dynamic;
         rb.velocity = Vector2.zero;
         col.enabled = true;
         sr.enabled = true;
-	}
+    }
 
     private void InvertColor()
     {
