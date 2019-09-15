@@ -74,6 +74,7 @@ public class Blade : MonoBehaviour
     {
         Vector2 scale = transform.localScale;
         this.dir = dir;
+        scale.x = Mathf.Abs(scale.x);
         scale.x *= dir;
         transform.localScale = scale;
     }
