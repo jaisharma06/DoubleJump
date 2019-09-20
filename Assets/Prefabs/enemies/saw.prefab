@@ -114,6 +114,6 @@ MonoBehaviour:
   dir: -1
   rotationSpeed: 0
   linearSpeed: 10
-  leftBorder: -9.4
-  rightBorder: 9.4
+  leftBorder: -10
+  rightBorder: 10
   gameOverMultiplier: 2
