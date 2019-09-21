@@ -26,6 +26,11 @@ public class InputHandler : MonoBehaviour
         if (Input.touchCount > 0 && gameManager.detectTouch)
         {
             var touch = Input.touches[0];
+            var isTouchOverUI = UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject(touch.fingerId);
+            if (isTouchOverUI)
+            {
+                return;
+            }
             switch (touch.phase)
             {
                 case TouchPhase.Began:
@@ -47,7 +52,8 @@ public class InputHandler : MonoBehaviour
 
     private void HandleInput()
     {
-        if (!gameManager.detectTouch)
+        var isTouchOverUI = UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject();
+        if (!gameManager.detectTouch || isTouchOverUI)
             return;
 
         if (Input.GetMouseButtonDown(0))
