@@ -2,6 +2,8 @@
 
 public class InputHandler : MonoBehaviour
 {
+    [HideInInspector]
+    public bool isInputActive = false;
     private PlayerController playerController;
     private GameManager gameManager;
     // Use this for initialization
@@ -14,6 +16,10 @@ public class InputHandler : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!isInputActive)
+        {
+            return;
+        }
 #if UNITY_EDITOR
         HandleInput();
 #else
