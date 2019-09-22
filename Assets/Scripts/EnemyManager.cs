@@ -39,6 +39,7 @@ public class EnemyManager : MonoBehaviour
     /// </summary>
     private void Start()
     {
+        PlaceSpawnPoints();
         InstantiateEnemies();
     }
 
@@ -111,7 +112,36 @@ public class EnemyManager : MonoBehaviour
         while (generate)
         {
             yield return new WaitForSeconds(spawnDuration);
-            SpawnEnemy(spawnPoints.GetRandom());
+            if (generate)
+                SpawnEnemy(spawnPoints.GetRandom());
+            else
+            {
+                if (activeEnemies.Count < 1)
+                {
+                    EventManager.CallOnNoEnemyLeft();
+                }
+            }
+        }
+    }
+
+    private void PlaceSpawnPoints()
+    {
+        float ScreenWidth = Screen.width;
+        float ScreenWidthToWorldPos = Camera.main.ScreenToWorldPoint(Vector3.right * ScreenWidth).x;
+        for(int i =0; i < spawnPoints.Count; i++)
+        {
+            Transform spawnPoint = spawnPoints[i];
+            Vector3 spawnPointPosition = spawnPoint.position;
+            if (spawnPointPosition.x < 0)
+            {
+                spawnPointPosition.x = -ScreenWidthToWorldPos + spawnPoint.GetComponent<SpriteRenderer>().bounds.size.x / 4;
+            }
+            else
+            {
+                spawnPointPosition.x = ScreenWidthToWorldPos - spawnPoint.GetComponent<SpriteRenderer>().bounds.size.x / 4;
+            }
+
+            spawnPoint.position = spawnPointPosition;
         }
     }
 }
