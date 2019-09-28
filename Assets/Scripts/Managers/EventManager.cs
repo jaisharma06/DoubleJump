@@ -9,6 +9,8 @@ public class EventManager
     public static Action<Blade> OnEnemyDeactive;
 	public static Action OnNoEnemyLeft;
     public static Action OnInvertColor;
+    public static Action OnJump;
+    public static Action OnDoubleJump;
 
     public static void CallOnGameOver()
     {
@@ -54,6 +56,22 @@ public class EventManager
         if (OnNoEnemyLeft != null)
         {
             OnNoEnemyLeft();
+        }
+    }
+
+    public static void CallOnJump()
+    {
+        if (OnJump != null)
+        {
+            OnJump();
+        }
+    }
+
+    public static void CallOnDoubleJump()
+    {
+        if (OnDoubleJump != null)
+        {
+            OnDoubleJump();
         }
     }
 }

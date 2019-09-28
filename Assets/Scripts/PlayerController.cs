@@ -104,6 +104,15 @@ public class PlayerController : MonoBehaviour
         {
             rb.velocity = Vector2.up * jumpVelocity;
             am.PlayOneShot(sfxJump);
+            switch (jumpCount)
+            {
+                case 0:
+                    EventManager.CallOnJump();
+                    break;
+                case 1:
+                    EventManager.CallOnDoubleJump();
+                    break;
+            }
             jumpCount++;
         }
     }

@@ -2,9 +2,9 @@
 using UnityEngine;
 public class GameManager : MonoBehaviour
 {
-    public int score = 0;
-    [SerializeField]
-    private TextMeshProUGUI scoreText;
+    //public int score = 0;
+    //[SerializeField]
+    //private TextMeshProUGUI scoreText;
     [SerializeField]
     private GameObject gameplayUI;
     [SerializeField]
@@ -39,16 +39,16 @@ public class GameManager : MonoBehaviour
 
     void OnTriggerExit2D(Collider2D other)
     {
-        if (isGameOver)
-        {
-            return;
-        }
-        var enemy = other.GetComponent<Blade>();
-        if (enemy)
-        {
-            score++;
-            scoreText.text = score.ToString();
-        }
+        //if (isGameOver)
+        //{
+        //    return;
+        //}
+        //var enemy = other.GetComponent<Blade>();
+        //if (enemy)
+        //{
+        //    score++;
+        //    scoreText.text = score.ToString();
+        //}
     }
 
     void OnDisable()
@@ -60,9 +60,9 @@ public class GameManager : MonoBehaviour
 
     public void StartGame()
     {
-        score = 0;
+        //score = 0;
         isGameOver = false;
-        scoreText.text = score.ToString();
+        //scoreText.text = score.ToString();
         EventManager.CallOnGameStart();
         gameplayUI.SetActive(true);
         startGameUI.SetActive(false);
