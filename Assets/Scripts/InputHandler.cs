@@ -40,16 +40,20 @@ public class InputHandler : MonoBehaviour
             switch (touch.phase)
             {
                 case TouchPhase.Began:
-                    if (gameManager.isGamePaused)
+                    if (gameManager.state == GameState.PAUSED)
                     {
                         gameManager.OnGamePaused(false);
                     }
-                    if (!gameManager.isGameOver && !gameManager.isGamePaused)
+                    if (gameManager.state != GameState.OVER && gameManager.state != GameState.PAUSED)
                         playerController.Jump();
                     break;
                 case TouchPhase.Ended:
-                    if (gameManager.isGameOver)
+                    if (gameManager.state == GameState.START)
                         gameManager.StartGame();
+                    else if (gameManager.state == GameState.OVER)
+                    {
+                        gameManager.ShowStartGameUI();
+                    }
                     break;
                 default: break;
             }
@@ -64,17 +68,21 @@ public class InputHandler : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0))
         {
-            if (!gameManager.isGameOver)
+            if (gameManager.state != GameState.OVER && gameManager.state != GameState.PAUSED)
                 playerController.Jump();
-            if (gameManager.isGamePaused)
+            if (gameManager.state == GameState.PAUSED)
             {
                 gameManager.OnGamePaused(false);
             }
         }
         else if (Input.GetMouseButtonUp(0))
         {
-            if (gameManager.isGameOver)
+            if (gameManager.state == GameState.START)
                 gameManager.StartGame();
+            else if (gameManager.state == GameState.OVER)
+            {
+                gameManager.ShowStartGameUI();
+            }
         }
     }
 }

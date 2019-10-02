@@ -13,6 +13,9 @@ public class PlayerController : MonoBehaviour
     private Transform destroyParticles;
 
     [SerializeField]
+    private GameObject doubleJumpVFX;
+
+    [SerializeField]
     private AudioClip sfxJump;
     [SerializeField]
     private AudioClip sfxBlast;
@@ -110,6 +113,11 @@ public class PlayerController : MonoBehaviour
                     EventManager.CallOnJump();
                     break;
                 case 1:
+                    if (doubleJumpVFX)
+                    {
+                        doubleJumpVFX.SetActive(false);
+                        doubleJumpVFX.SetActive(true);
+                    }
                     EventManager.CallOnDoubleJump();
                     break;
             }

@@ -1,5 +1,16 @@
-﻿using TMPro;
+﻿using System;
+using TMPro;
 using UnityEngine;
+
+[Serializable]
+public enum GameState
+{
+    START = 0,
+    GAME = 1,
+    PAUSED = 2,
+    OVER = 3
+}
+
 public class GameManager : MonoBehaviour
 {
     //public int score = 0;
@@ -15,6 +26,8 @@ public class GameManager : MonoBehaviour
     private GameObject startGameUI;
     [SerializeField]
     private SpriteRenderer ground;
+    [SerializeField]
+    private GameObject endGameUI;
 
     [HideInInspector]
     public bool isGameOver = true;
@@ -22,6 +35,8 @@ public class GameManager : MonoBehaviour
     public bool isGamePaused = false;
     [HideInInspector]
     public bool detectTouch = true;
+
+    public GameState state;
 
     private Camera mainCamera;
 
@@ -35,20 +50,8 @@ public class GameManager : MonoBehaviour
 
         mainCamera = Camera.main;
         am = AudioManager.instance;
-    }
 
-    void OnTriggerExit2D(Collider2D other)
-    {
-        //if (isGameOver)
-        //{
-        //    return;
-        //}
-        //var enemy = other.GetComponent<Blade>();
-        //if (enemy)
-        //{
-        //    score++;
-        //    scoreText.text = score.ToString();
-        //}
+        state = GameState.START;
     }
 
     void OnDisable()
@@ -63,6 +66,7 @@ public class GameManager : MonoBehaviour
         //score = 0;
         isGameOver = false;
         //scoreText.text = score.ToString();
+        state = GameState.GAME;
         EventManager.CallOnGameStart();
         gameplayUI.SetActive(true);
         startGameUI.SetActive(false);
@@ -74,13 +78,22 @@ public class GameManager : MonoBehaviour
         isGameOver = true;
         detectTouch = false;
         am.PlayBackgroundMusic(false);
+        state = GameState.OVER;
     }
 
     private void OnNoEnemyLeft()
     {
         gameplayUI.SetActive(false);
         detectTouch = true;
+        //startGameUI.SetActive(true);
+        endGameUI.SetActive(true);
+    }
+
+    public void ShowStartGameUI()
+    {
         startGameUI.SetActive(true);
+        endGameUI.SetActive(false);
+        state = GameState.START;
     }
 
     private void InvertColor()
@@ -102,6 +115,7 @@ public class GameManager : MonoBehaviour
         if (isGameOver)
             return;
         isGamePaused = flag;
+        state = (flag) ? GameState.PAUSED : GameState.START;
         pauseButton.SetActive(!flag);
         pausedText.SetActive(flag);
         Time.timeScale = (flag) ? 0 : 1;
