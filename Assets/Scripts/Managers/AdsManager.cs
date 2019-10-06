@@ -3,13 +3,13 @@ using UnityEngine.Advertisements;
 //using UnityEngine.UI;
 
 //[RequireComponent(typeof(Button))]
-public class AdsManager : MonoBehaviour, IUnityAdsListener
+public class AdsManager : MonoBehaviour
 {
-    public bool testMode = true;
+    public bool testMode = false;
     public InputHandler inputHandler;
     public int skipChances = 3;
-    private string gameId = "3315696";
-    private string rewardAdsId = "rewardedVideo";
+    private string gameId = "3316022";
+    private string rewardAdsId = "video";
     private string videoAdId = "video";
 
     //private Button button;
@@ -32,9 +32,7 @@ public class AdsManager : MonoBehaviour, IUnityAdsListener
         //{
            //button.onClick.AddListener(ShowRewardAds);
         //}
-
-        Advertisement.AddListener(this);
-        Advertisement.Initialize(gameId, testMode);
+        Advertisement.Initialize (gameId, testMode);
     }
 
     private void OnDisable()
@@ -62,11 +60,11 @@ public class AdsManager : MonoBehaviour, IUnityAdsListener
     {
         if (rewardAdsId == placementId)
         {
-            Advertisement.Show(rewardAdsId);
+            // Advertisement.Show(rewardAdsId);
         }
         else if (placementId == videoAdId)
         {
-            Advertisement.Show(videoAdId);
+            // Advertisement.Show(videoAdId);
         }
     }
 
