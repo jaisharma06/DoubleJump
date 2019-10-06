@@ -1,7 +1,11 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\Assets",
+    "\\Assets\\Scripts",
+    "\\Assets\\Scripts\\Google",
+    "\\Assets\\Scripts\\Managers"
   ],
-  "SelectedNode": "\\Logs",
+  "SelectedNode": "\\Assets\\Scripts\\Google\\GPGManager.cs",
   "PreviewInSolutionExplorer": false
 }

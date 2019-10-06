@@ -6,7 +6,6 @@ using UnityEngine.UI;
 
 public class GPGManager : MonoBehaviour
 {
-#if UNITY_ANDROID
     public Text text;
 
     // Use this for initialization
@@ -40,7 +39,7 @@ public class GPGManager : MonoBehaviour
     {
         text.text="success";
 
-        PlayGamesPlatform.Instance.SetDefaultLeaderboardForUI(GPGSIds.leaderboard_top_score);
+        PlayGamesPlatform.Instance.SetDefaultLeaderboardForUI(GPGSIds.leaderboard_single_top_score);
     }
 
     private void OnLoginFailure()
@@ -50,9 +49,10 @@ public class GPGManager : MonoBehaviour
 
     public void ShowLeaderboards()
     {
+        text.text="showing leadersboard";
         if (PlayGamesPlatform.Instance.localUser.authenticated)
         {
-            PlayGamesPlatform.Instance.ShowLeaderboardUI();
+            PlayGamesPlatform.Instance.ShowLeaderboardUI(GPGSIds.leaderboard_single_top_score);
         }
         else
         {
@@ -62,12 +62,12 @@ public class GPGManager : MonoBehaviour
 
     public void UpdateUserScore(int score)
     {
-        Social.ReportScore(score, GPGSIds.leaderboard_top_score, OnLeaderboardUpdate);
+        text.text="pushing latest score";
+        Social.ReportScore(score, GPGSIds.leaderboard_single_top_score, OnLeaderboardUpdate);
     }
 
     public void OnLeaderboardUpdate(bool success)
     {
-
+text.text="latest score pushed";
     }
-#endif
 }
