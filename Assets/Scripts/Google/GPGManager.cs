@@ -1,5 +1,4 @@
 ﻿using GooglePlayGames;
-using UnityEngine.SocialPlatforms;
 using GooglePlayGames.BasicApi;
 using UnityEngine;
 using UnityEngine.UI;
